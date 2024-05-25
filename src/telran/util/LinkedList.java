@@ -28,7 +28,7 @@ public class LinkedList<T> implements List<T> {
     @Override
     public boolean remove(T pattern) {
         int index = indexOf(pattern);
-        boolean result = index != -1;
+        boolean result = index > -1;
         if (result) {
             remove(index);
         }
@@ -37,7 +37,7 @@ public class LinkedList<T> implements List<T> {
 
     @Override
     public boolean contains(T pattern) {
-        return indexOf(pattern) != -1;
+        return indexOf(pattern) > -1;
     }
 
     @Override
