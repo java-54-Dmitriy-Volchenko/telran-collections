@@ -1,6 +1,15 @@
 package telran.util;
 
+
 public interface List<T> extends Collection<T> {
+	static void checkIndex(int index, int maxValue, boolean exclusive) {
+		if (exclusive) {
+			maxValue--;
+		}
+		if(index < 0 || index > maxValue) {
+			throw new IndexOutOfBoundsException();
+		}
+	}
 	/**
 	 * 
 	 * @param index
@@ -41,4 +50,6 @@ public interface List<T> extends Collection<T> {
 	 * otherwise -1
 	 */
 	int lastIndexOf(T pattern) ;
+	/****************************************************************/
+	
 }

@@ -2,6 +2,8 @@ package telran.util;
 
 import java.util.Arrays;
 import java.util.Iterator;
+import java.util.NoSuchElementException;
+import java.util.Objects;
 
 public class ArrayList<T> implements List<T> {
 	private static final int DEFAULT_CAPACITY = 16;
@@ -15,17 +17,18 @@ public class ArrayList<T> implements List<T> {
 		this(DEFAULT_CAPACITY);
 	}
 	private class ArrayListIterator implements Iterator<T> {
-
+		int currentIndex = 0;
 		@Override
 		public boolean hasNext() {
-			// TODO Auto-generated method stub
-			return false;
+			return currentIndex < size;
 		}
 
 		@Override
 		public T next() {
-			// TODO Auto-generated method stub
-			return null;
+			if(!hasNext()) {
+				throw new NoSuchElementException();
+			}
+			return array[currentIndex++];
 		}
 		
 	}
@@ -34,17 +37,12 @@ public class ArrayList<T> implements List<T> {
 	 * adds object at end of array, that is, at index == size
 	 */
 	public boolean add(T obj) {
-		if (size == array.length) {
-			allocate();
-		}
+		allocateIfNeeded();
 		array[size++] = obj;
 		return true;
 	}
 
-	private void allocate() {
-		array = Arrays.copyOf(array, array.length * 2);
-		
-	}
+	
 	@Override
 	public boolean remove(T pattern) {
 		int index = indexOf(pattern);
@@ -70,38 +68,55 @@ public class ArrayList<T> implements List<T> {
 
 	@Override
 	public Iterator<T> iterator() {
-		// TODO Auto-generated method stub
-		return null;
+		return new ArrayListIterator();
 	}
 
 	@Override
 	public T get(int index) {
-		// TODO Auto-generated method stub
-		return null;
+		List.checkIndex(index, size, true);
+		return array[index];
 	}
 
 	@Override
 	public void add(int index, T obj) {
-		// TODO Auto-generated method stub
-
+		List.checkIndex(index, size, false);
+		allocateIfNeeded();
+		System.arraycopy(array, index, array, index + 1, size - index);
+		array[index] = obj;
+		size++;
 	}
 
+	private void allocateIfNeeded() {
+		if(size == array.length) {
+			array = Arrays.copyOf(array, array.length * 2);
+		}
+		
+	}
 	@Override
 	public T remove(int index) {
-		// TODO Auto-generated method stub
-		return null;
+		List.checkIndex(index, size, true);
+		T res = array[index];
+		System.arraycopy(array, index + 1, array, index, size - index - 1);
+		array[--size] = null;
+		return res;
 	}
 
 	@Override
 	public int indexOf(T pattern) {
-		// TODO Auto-generated method stub
-		return 0;
+		int index = 0;
+		while(index < size && !Objects.equals(array[index], pattern)) {
+			index++;
+		}
+		return index < size ? index : -1;
 	}
 
 	@Override
 	public int lastIndexOf(T pattern) {
-		// TODO Auto-generated method stub
-		return 0;
+		int index = size - 1;
+		while(index >= 0 && !Objects.equals(array[index], pattern)) {
+			index--;
+		}
+		return index;
 	}
 
 }
