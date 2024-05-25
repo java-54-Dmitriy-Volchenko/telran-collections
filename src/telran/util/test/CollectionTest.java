@@ -72,4 +72,4 @@ public abstract class CollectionTest {
 		assertEquals(N_ELEMENTS + numbers.length, collection.size());
 		
 	}
-}
+} 
