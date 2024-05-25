@@ -22,7 +22,7 @@ public class LinkedList<T> implements List<T> {
     
     public boolean add(T obj) {		//O(1)
         Node<T> node = new Node<>(obj);
-        addNode(size, node);
+        addNode(size, node);	
         return true;
     }
 
@@ -77,14 +77,14 @@ public class LinkedList<T> implements List<T> {
 
     @Override
    
-    public T get(int index) { //O(1)
+    public T get(int index) { //O(N)
         List.checkIndex(index, size, true);
         return getNode(index).data;
     }
 
     @Override
   
-    public void add(int index, T obj) {  //O(1)
+    public void add(int index, T obj) {  //O(N)
         List.checkIndex(index, size, false);
         Node<T> node = new Node<>(obj);
         addNode(index, node);
@@ -92,7 +92,7 @@ public class LinkedList<T> implements List<T> {
 
     @Override
     
-    public T remove(int index) { //O(1)
+    public T remove(int index) { //O(N)
         List.checkIndex(index, size, true);
         Node<T> node = getNode(index);
         if (node.prev != null) {
@@ -164,7 +164,7 @@ public class LinkedList<T> implements List<T> {
         return current;
     }
 
-    private void addNode(int index, Node<T> node) {//O(1)
+    private void addNode(int index, Node<T> node) {//O(N)
         if (index == 0) {
             addHead(node);
         } else if (index == size) {
@@ -175,7 +175,7 @@ public class LinkedList<T> implements List<T> {
         size++;
     }
 
-    private void addMiddle(Node<T> node, int index) {//O(1)
+    private void addMiddle(Node<T> node, int index) {//O(N)
         Node<T> nodeNext = getNode(index);
         Node<T> nodePrev = nodeNext.prev;
         nodeNext.prev = node;
