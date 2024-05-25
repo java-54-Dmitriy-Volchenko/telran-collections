@@ -7,7 +7,7 @@ import telran.util.LinkedList;
 
 public class LinkedListTest extends ListTest {
 	@BeforeEach
-	  @Override
+	  @Override 
 	  void setUp() {
 		  collection = new LinkedList<Integer>();
 		  super.setUp();
