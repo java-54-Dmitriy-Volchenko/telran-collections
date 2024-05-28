@@ -56,6 +56,9 @@ public abstract class ListTest extends CollectionTest {
 		runTest(expected0_2_last);
 		testIndexExceptions(() -> list.remove(numbers.length));
 		testIndexExceptions(() -> list.remove(-1));
+		list.remove(0);
+		list.remove(0);
+		runTest(new Integer[0]);
 	}
 
 	void testIndexExceptions(Executable executable) {
