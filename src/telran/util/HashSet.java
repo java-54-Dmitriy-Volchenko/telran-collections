@@ -10,6 +10,7 @@ public class HashSet<T> implements Set<T> {
     List<T>[] hashTable;
     int size;
     float factor;
+    
 
     public HashSet(int hashTableLength, float factor) {
         hashTable = new List[hashTableLength];
@@ -86,40 +87,36 @@ public class HashSet<T> implements Set<T> {
         hashTable = tmp;
     }
 
-    private void addObjInHashTable(T obj, List<T>[] table) {
-        int index = getIndex(obj);
-        List<T> list = table[index];
+    private void addObjInHashTable(T obj, 	List<T>[] lists) {
+        int index = getIndex(obj,hashTable);
+        List<T> list = lists[index];
         if (list == null) {
             list = new LinkedList<>();
-            table[index] = list;
+            lists[index] = list;
         }
         list.add(obj);
     }
 
-    private int getIndex(T obj) {
+    private int getIndex(T obj,List<T>[] lists ) {
         int hashCode = obj.hashCode();
-        int index = Math.abs(hashCode % hashTable.length);
+        int index = Math.abs(hashCode % lists.length);
         return index;
     }
 
     @Override
     public boolean remove(T pattern) {
-        int index = getIndex(pattern);
-        List<T> basket = hashTable[index];
-        boolean res = false;
-        if (basket != null && basket.remove(pattern)) {
-            size--;
-            if (basket.size() == 0) {
-                hashTable[index] = null;
-            }
-            res = true;
-        }
+    	  boolean res = contains (pattern);
+      if(res) {
+    	  int index = getIndex(pattern, hashTable);
+    	  hashTable[index].remove(pattern);
+    	  size--;
+      }
         return res;
     }
 
     @Override
     public boolean contains(T pattern) {
-        int index = getIndex(pattern);
+        int index = getIndex(pattern, hashTable);
         List<T> list = hashTable[index];
         return list != null && list.contains(pattern);
     }
@@ -136,12 +133,12 @@ public class HashSet<T> implements Set<T> {
 
     @Override
     public T get(T pattern) {
-        int index = getIndex(pattern);
+        int index = getIndex(pattern, hashTable);
         List<T> basket = hashTable[index];
         T res = null;
         
         if (basket != null) {
-            for (T element : basket) {
+            for (T element : basket) {	
                 if (element.equals(pattern)) {
                     res = element;
                 }
