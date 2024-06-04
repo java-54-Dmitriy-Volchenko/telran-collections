@@ -72,15 +72,17 @@ private class TreeSetIterator implements Iterator<T> {
 	}
 
 	public Node<T> getCurrent(Node<T> current) {
-		// TODO Auto-generated method stub
+		
 		//Algorithm see on the board
 		return current.right != null ? getLeastFrom(current.right) :
 			getFirstGreaterParent(current);
 	}
-
+//done
 	private Node<T> getFirstGreaterParent(Node<T> current) {
-		// TODO Auto-generated method stub
-		return null;
+		while (current.parent != null && current.parent.left != current) {
+			current = current.parent;
+		}
+		return current.parent;
 	}
 	private Node<T> getLeastFrom(Node<T> node) {
 		if (node != null) {
@@ -142,12 +144,49 @@ private class TreeSetIterator implements Iterator<T> {
 		}
 		return res;
 	}
-
+//done
 	private void removeNode(Node<T> node) {
-		// TODO Auto-generated method stub
+		if (isFull(node)) {
+			deleteFullNode(node);
+		} else {
+			deleteNotFullNode(node);
+		}
+		size--;
 		
 	}
 
+	private void deleteNotFullNode(Node<T> node) {
+		Node<T> parent = node.parent;
+		Node<T> son = oneSon(node);
+		if (parent != null) {
+			if (node == parent.right) {
+				parent.right = son;
+			} else {
+				parent.left = son;
+			}
+		} else {
+			root = son;
+		}
+		if (son != null) {
+			son.parent = parent;
+		}
+		
+	}
+	private Node<T> oneSon(Node<T> node) {
+		return node.right != null ? node.right : node.left;
+	}
+	
+	private void deleteFullNode(Node<T> node) {
+		Node<T> toDelete = getLeastFrom(node.right);
+		node.data = toDelete.data;
+		deleteNotFullNode(toDelete);
+		
+	}
+	private boolean isFull(Node<T> node) {
+		return node.left != null && node.right != null;
+	}
+	
+	
 	@Override
 	public boolean contains(T pattern) {
 		
