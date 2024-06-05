@@ -146,7 +146,10 @@ private class TreeSetIterator implements Iterator<T> {
 	}
 //done
 	private void removeNode(Node<T> node) {
-		if (isFull(node)) {
+		
+		boolean isFull = node.left != null && node.right != null;
+		
+		if (isFull) {
 			deleteFullNode(node);
 		} else {
 			deleteNotFullNode(node);
@@ -157,12 +160,12 @@ private class TreeSetIterator implements Iterator<T> {
 // if node has only one son or its a leaf - deletion is like in linkedList - with changing links
 	private void deleteNotFullNode(Node<T> node) {
 		Node<T> parent = node.parent;//parent node of deleting element
-		Node<T> son = leftOrRightSon(node);//son of a deleting element
+		Node<T> son = node.right != null ? node.right : node.left;//son of a deleting element - is he left or right
 		if (parent != null) {//if deleting element is not a root
-			if (node == parent.right) {//if deleting element is right of its parent
+			if (node == parent.right) {//if deleting element is right to its parent
 				parent.right = son;//after deletion right son of parent of deleting element will be his  own son
 			} else {
-				parent.left = son;//if deleting element is left of its parent, after deletion left son of parent of deleting element will be his own son
+				parent.left = son;//if deleting element is left to its parent, after deletion left son of parent of deleting element will be his own son
 			}
 		} else {
 			root = son;// if deleting element was root - after deleting his son will begin a root
@@ -172,19 +175,15 @@ private class TreeSetIterator implements Iterator<T> {
 		}
 		
 	}
-	private Node<T> leftOrRightSon(Node<T> node) {
-		return node.right != null ? node.right : node.left;
-	}
+	
 	
 	private void deleteFullNode(Node<T> node) { //if deleting element has "two legs":
 		Node<T> toDelete = getLeastFrom(node.right);//we couldn't delete its own, but we can copy to it value of least element of his right tree(or greater element of its left tree - that is the same);
 		node.data = toDelete.data;// copy
-		deleteNotFullNode(toDelete);//... and delete that least element by the method of deleting not full nodes as it is not full by its nature (it is has null as its left) 
+		deleteNotFullNode(toDelete);//... and delete that least element by the method of deleting not full nodes as it is not full by its nature (it has null as its left) 
 		
 	}
-	private boolean isFull(Node<T> node) {//find that this our node has "two legs"
-		return node.left != null && node.right != null;
-	}
+
 	
 	
 	@Override
