@@ -173,6 +173,7 @@ private class TreeSetIterator implements Iterator<T> {
 		if (son != null) {//if deleting element not a leaf
 			son.parent = parent; //parent of this son after deletion will be parent of deleting element
 		}
+		node = null;
 		
 	}
 	
@@ -181,7 +182,7 @@ private class TreeSetIterator implements Iterator<T> {
 		Node<T> toDelete = getLeastFrom(node.right);//we couldn't delete its own, but we can copy to it value of least element of his right tree(or greater element of its left tree - that is the same);
 		node.data = toDelete.data;// copy
 		deleteNotFullNode(toDelete);//... and delete that least element by the method of deleting not full nodes as it is not full by its nature (it has null as its left) 
-		
+		node = null;
 	}
 
 	
