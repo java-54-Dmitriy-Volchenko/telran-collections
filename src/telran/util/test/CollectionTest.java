@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import telran.util.Collection;
+import telran.util.List;
 
 public abstract class CollectionTest {
 	private static final int N_ELEMENTS = 1_048_575;
@@ -85,6 +86,12 @@ public abstract class CollectionTest {
 			actual[index++] = num;
 		}
 		assertEquals(N_ELEMENTS, index);
-		
+		if (collection instanceof List) {
+			System.out.println("Performance test of method \"contains\" for all List objects takes huge time");
+		} else {
+		for (int i=0; i<N_RUNS; i++) {
+			collection.contains(random.nextInt());
+		}
+		}
 	}
-}	
+}		

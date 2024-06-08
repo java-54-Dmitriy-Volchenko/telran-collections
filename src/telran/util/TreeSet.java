@@ -4,7 +4,7 @@ import java.util.Comparator;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-public class TreeSet<T> implements SortedSet<T> {
+public class TreeSet<T> extends AbstractCollection<T> implements SortedSet<T> {
 private static class Node<T> {
 	T data;
 	Node<T> parent;
@@ -35,7 +35,7 @@ private class TreeSetIterator implements Iterator<T> {
 	
 }
 	Node<T> root;
-	int size;
+	
 	private Comparator<T> comp;
 	public TreeSet(Comparator<T> comp) {
 		this.comp = comp;
@@ -197,11 +197,7 @@ private class TreeSetIterator implements Iterator<T> {
 		return getNode(pattern) != null;
 	}
 
-	@Override
-	public int size() {
-		
-		return size;
-	}
+	
 
 	@Override
 	public Iterator<T> iterator() {

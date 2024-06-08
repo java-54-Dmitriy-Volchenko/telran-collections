@@ -7,11 +7,11 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 @SuppressWarnings("unchecked")
-public class HashSet<T> implements Set<T> {
+public class HashSet<T> extends AbstractCollection<T> implements Set<T> {
 	private static final int DEFAULT_HASH_TABLE_LENGTH = 16;
 	private static final float DEFAULT_FACTOR = 0.75f;
 	List<T> [] hashTable;
-	int size;
+	
 	float factor;
 	
 	
@@ -196,12 +196,7 @@ public class HashSet<T> implements Set<T> {
 		return list != null && list.contains(pattern);
 	}
 
-	@Override
-	public int size() {
-		
-		return size;
-	}
-
+	
 	
 
 	@Override
