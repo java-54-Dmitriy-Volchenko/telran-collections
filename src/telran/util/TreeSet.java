@@ -32,10 +32,13 @@ private class TreeSetIterator implements Iterator<T> {
 		current = getCurrent(current);
 		return res;
 	}
+	@Override
+	public void remove() {
+		//TODO
+	}
 	
 }
 	Node<T> root;
-	
 	private Comparator<T> comp;
 	public TreeSet(Comparator<T> comp) {
 		this.comp = comp;
@@ -72,17 +75,18 @@ private class TreeSetIterator implements Iterator<T> {
 	}
 
 	public Node<T> getCurrent(Node<T> current) {
-		
 		//Algorithm see on the board
 		return current.right != null ? getLeastFrom(current.right) :
 			getFirstGreaterParent(current);
 	}
-//done
-	private Node<T> getFirstGreaterParent(Node<T> current) {//if parent element exist and previous current element is right of his parent
-		while (current.parent != null && current.parent.left != current) {
-			current = current.parent;//... new current will be parent of previous current
+
+	private Node<T> getFirstGreaterParent(Node<T> current) {
+		Node<T> parent = current.parent;
+		while(parent != null && parent.right == current) {
+			current = current.parent;
+			parent = current.parent;
 		}
-		return current.parent;
+		return parent;
 	}
 	private Node<T> getLeastFrom(Node<T> node) {
 		if (node != null) {
@@ -144,21 +148,29 @@ private class TreeSetIterator implements Iterator<T> {
 		}
 		return res;
 	}
-//done
+
 	private void removeNode(Node<T> node) {
-		
-		boolean isFull = node.left != null && node.right != null;
-		
-		if (isFull) {
-			deleteFullNode(node);
+		if(node.left != null && node.right != null) {
+			removeJunction(node);
 		} else {
-			deleteNotFullNode(node);
+			removeNonJunction(node);
 		}
+		
 		size--;
+	}
+
+	private void setNulls(Node<T> node) {
+		node.data = null;
+		node.parent = node.left = node.right = null;
 		
 	}
-// if node has only one son or its a leaf - deletion is like in linkedList - with changing links
-	private void deleteNotFullNode(Node<T> node) {
+	private void removeJunction(Node<T> node) {
+		Node<T> substitute = getGreatestFrom(node.left);
+		node.data = substitute.data;
+		removeNonJunction(substitute);
+		
+	}
+	private void removeNonJunction(Node<T> node) {
 		Node<T> parent = node.parent;
 		Node<T> child = node.left != null ? node.left : node.right;
 		if(parent == null) {
@@ -173,24 +185,7 @@ private class TreeSetIterator implements Iterator<T> {
 		}
 		setNulls(node);
 		
-		
 	}
-	
-	
-	private void setNulls(Node<T> node) {
-		node.data = null;
-		node.parent = node.left = node.right = null;
-	
-}
-	private void deleteFullNode(Node<T> node) { //if deleting element has "two legs":
-		Node<T> toDelete = getLeastFrom(node.right);//we couldn't delete its own, but we can copy to it value of least element of his right tree(or greater element of its left tree - that is the same);
-		node.data = toDelete.data;// copy
-		deleteNotFullNode(toDelete);//... and delete that least element by the method of deleting not full nodes as it is not full by its nature (it has null as its left) 
-		
-	}
-
-	
-	
 	@Override
 	public boolean contains(T pattern) {
 		
@@ -214,10 +209,10 @@ private class TreeSetIterator implements Iterator<T> {
 	@Override
 	public T last() {
 		
-		return root == null ? null : getGreatesFrom(root).data;
+		return root == null ? null : getGreatestFrom(root).data;
 	}
 
-	private Node<T> getGreatesFrom(Node<T> node) {
+	private Node<T> getGreatestFrom(Node<T> node) {
 		if(node != null) {
 			while(node.right != null) {
 				node = node.right;

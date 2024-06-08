@@ -7,7 +7,6 @@ import java.util.Objects;
 public class LinkedList<T> extends AbstractCollection<T> implements List<T> {
 	Node<T> head;
 	Node<T> tail;
-	
  private static class Node<T> {
 	 T data;
 	 Node<T> prev;
@@ -27,7 +26,7 @@ public class LinkedList<T> extends AbstractCollection<T> implements List<T> {
 
 	
 
-
+	
 	private class LinkedListIterator implements Iterator<T> {
 		Node<T> current = head;
 		@Override
@@ -43,6 +42,10 @@ public class LinkedList<T> extends AbstractCollection<T> implements List<T> {
 			T res = current.data;
 			current = current.next;
 			return res;
+		}
+		@Override
+		public void remove() {
+			//TODO
 		}
 		
 	}
