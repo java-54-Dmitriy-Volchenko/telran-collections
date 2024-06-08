@@ -159,30 +159,34 @@ private class TreeSetIterator implements Iterator<T> {
 	}
 // if node has only one son or its a leaf - deletion is like in linkedList - with changing links
 	private void deleteNotFullNode(Node<T> node) {
-		Node<T> parent = node.parent;//parent node of deleting element
-		Node<T> son = node.right != null ? node.right : node.left;//son of a deleting element - is he left or right
-		if (parent != null) {//if deleting element is not a root
-			if (node == parent.right) {//if deleting element is right to its parent
-				parent.right = son;//after deletion right son of parent of deleting element will be his  own son
-			} else {
-				parent.left = son;//if deleting element is left to its parent, after deletion left son of parent of deleting element will be his own son
-			}
+		Node<T> parent = node.parent;
+		Node<T> child = node.left != null ? node.left : node.right;
+		if(parent == null) {
+			root = child; //actual root removing
+		} else if(node == parent.left) {
+			parent.left = child;
 		} else {
-			root = son;// if deleting element was root - after deleting his son will begin a root
+			parent.right = child;
 		}
-		if (son != null) {//if deleting element not a leaf
-			son.parent = parent; //parent of this son after deletion will be parent of deleting element
+		if(child != null) {
+			child.parent = parent;
 		}
-		node = null;
+		setNulls(node);
+		
 		
 	}
 	
 	
+	private void setNulls(Node<T> node) {
+		node.data = null;
+		node.parent = node.left = node.right = null;
+	
+}
 	private void deleteFullNode(Node<T> node) { //if deleting element has "two legs":
 		Node<T> toDelete = getLeastFrom(node.right);//we couldn't delete its own, but we can copy to it value of least element of his right tree(or greater element of its left tree - that is the same);
 		node.data = toDelete.data;// copy
 		deleteNotFullNode(toDelete);//... and delete that least element by the method of deleting not full nodes as it is not full by its nature (it has null as its left) 
-		node = null;
+		
 	}
 
 	
