@@ -1,8 +1,11 @@
 package telran.util.test;
 
 import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertThrowsExactly;
 
 import java.util.Arrays;
+import java.util.Iterator;
+import java.util.NoSuchElementException;
 import java.util.Random;
 
 
@@ -28,6 +31,18 @@ public abstract class CollectionTest {
 	@Test
 	void iteratorTest() {
 		runTest(numbers);
+		
+		Iterator <Integer> it = collection.iterator();
+		assertThrowsExactly(IllegalStateException.class, ()->it.remove());
+		
+		while (it.hasNext()) {
+			it.next();
+			}
+		
+		assertThrowsExactly (NoSuchElementException.class,()->it.next());
+		it.remove();//two remove calls with no iterating must throws exception
+		assertThrowsExactly(IllegalStateException.class, ()->it.remove());
+		
 	}
 	@Test
 	void addEqualedTest() {
@@ -94,4 +109,19 @@ public abstract class CollectionTest {
 		}
 		}
 	}
-}		
+		@Test
+		void removeIfTest() {
+		assertTrue (collection.removeIf(n->n%2==0));
+		assertTrue (collection.stream().allMatch(n->n%2!=0));
+		assertFalse (collection.removeIf(n->n%2==0));
+		
+		}
+		@Test
+		void clearTest() {
+			collection.clear();
+		assertEquals (0, collection.size());
+		
+		
+		}
+
+}	

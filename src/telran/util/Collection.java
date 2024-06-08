@@ -1,5 +1,6 @@
 package telran.util;
 
+import java.util.Iterator;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
@@ -17,12 +18,14 @@ public interface Collection<T> extends Iterable<T> {
 	int size();
 	default boolean removeIf(Predicate<T>predicate){
 		int oldSize = size();
-		for(T obj : this){
+		Iterator<T> it = iterator();
+		while(it.hasNext()) {
+			T obj=it.next();
 			if(predicate.test(obj)) {
-				remove(obj);
+				it.remove();
 			}
+			
 		}
-		//TODO
 		//removes elements objects matching  a given predicate
 		return oldSize>size();
 	}
