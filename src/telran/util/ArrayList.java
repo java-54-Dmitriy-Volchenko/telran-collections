@@ -53,11 +53,25 @@ public class ArrayList<T> extends AbstractCollection<T> implements List<T> {
 	}
 	@Override
 	public boolean removeIf(Predicate<T> predicate) {
-		//TODO
+	
 		//Two indexes on one array
-		//no allocation for new array
-		return false;
-	}
+		//no allocation for new array 
+		int i = 0;
+        int j = 0;
+        while (i < size) {
+            if (!predicate.test(array[i])) {
+                array[j++] = array[i];//if element not equals predicate - put it to j-position
+            }
+            i++;
+        }
+        boolean isChanges = j != size;
+        for (int z = j; z < size; z++) {//if something was equaled to predicate, j counter will be less then size of array
+            array[z] = null;//all the elements more then J have to be rewrite by nulls
+        }
+        size = j;
+        return isChanges;
+		
+    }
 
 	
 	

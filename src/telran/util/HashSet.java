@@ -13,53 +13,61 @@ public class HashSet<T> extends AbstractCollection<T> implements Set<T> {
 	float factor;
 
 	private class HashSetIterator implements Iterator<T> {
-		Iterator<T> iterator;
+		 Iterator<T> iterator;
+		    int iteratorIndex;
+		    T afterNext;
 
-		int iteratorIndex;
+		    HashSetIterator() {
+		        iteratorIndex = 0;
+		        iterator = getIterator(0);
+		        setIteratorIndex();
+		    }
 
-		HashSetIterator() {
-			iteratorIndex = 0;
-			iterator = getIterator(0);
-			setIteratorIndex();
+		    private Iterator<T> getIterator(int index) {
+		        List<T> list = hashTable[index];
+		        return list == null ? null : list.iterator();
+		    }
+
+		    @Override
+		    public boolean hasNext() {
+		        return iteratorIndex < hashTable.length;
+		    }
+
+		    @Override
+		    public T next() {
+		        if (!hasNext()) {
+		            throw new NoSuchElementException();
+		        }
+		        afterNext = iterator.next();
+		        setIteratorIndex();
+		        return afterNext;
+		    }
+
+		    private void setIteratorIndex() {
+		        int limit = hashTable.length - 1; // for not doing checking index inside iteration
+		        while (iteratorIndex < limit && (iterator == null || !iterator.hasNext())) {
+		            iteratorIndex++;
+		            iterator = getIterator(iteratorIndex);
+		        }
+		        if (iteratorIndex == limit && (hashTable[iteratorIndex] == null || !iterator.hasNext())) {
+		            iteratorIndex++;
+		        }
+		    }
+
+		    @Override
+		    public void remove() {
+		        if (afterNext == null) {
+		            throw new IllegalStateException();
+		        }
+		        int index = getIndex(afterNext, hashTable.length);
+		        hashTable[index].remove(afterNext);
+		        afterNext = null; 
+		        size--;
+		    }
 		}
 
-		private Iterator<T> getIterator(int index) {
-			List<T> list = hashTable[index];
-			return list == null ? null : list.iterator();
-		}
 
-		@Override
-		public boolean hasNext() {
-
-			return iteratorIndex < hashTable.length;
-		}
-
-		@Override
-		public T next() {
-			if (!hasNext()) {
-				throw new NoSuchElementException();
-			}
-			T res = iterator.next();
-			setIteratorIndex();
-			return res;
-		}
-
-		private void setIteratorIndex() {
-			int limit = hashTable.length - 1; // for not doing checking index inside iteration
-			while (iteratorIndex < limit && (iterator == null || !iterator.hasNext())) {
-				iteratorIndex++;
-				iterator = getIterator(iteratorIndex);
-			}
-			if (iteratorIndex == limit && (hashTable[iteratorIndex] == null || !iterator.hasNext())) {
-				iteratorIndex++;
-			}
-		}
-		@Override
-		public void remove() {
-			//TODO
-		}
-
-	}
+	
 
 	public HashSet(int hashTableLength, float factor) {
 		hashTable = new List[hashTableLength];

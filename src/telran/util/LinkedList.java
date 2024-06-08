@@ -29,6 +29,7 @@ public class LinkedList<T> extends AbstractCollection<T> implements List<T> {
 	
 	private class LinkedListIterator implements Iterator<T> {
 		Node<T> current = head;
+		Node<T> afterNext = null;//this is last returned element. It will be removed by the iterator in remove method
 		@Override
 		public boolean hasNext() {
 			return current != null;
@@ -39,16 +40,25 @@ public class LinkedList<T> extends AbstractCollection<T> implements List<T> {
 			if(!hasNext()) {
 				throw new NoSuchElementException();
 			}
-			T res = current.data;
-			current = current.next;
-			return res;
+			 afterNext = current;
+	         current = current.next;
+	         return afterNext.data;
 		}
 		@Override
 		public void remove() {
-			//TODO
+			 if (afterNext == null) {//if it was not next before remove
+	                throw new IllegalStateException();
+	            }
+	            Node<T> nextNode = afterNext.next;//reference to a next Node
+	            removeNode(afterNext);//removes node and feels all the deleted Node references and data with nulls
+	            if (current == afterNext) {
+	                current = nextNode;
+	            }
+	            afterNext = null;//clear reference to prepare to the new invoke of next function
+	        }
 		}
 		
-	}
+	
 	@Override
 	public Iterator<T> iterator() {
 		
