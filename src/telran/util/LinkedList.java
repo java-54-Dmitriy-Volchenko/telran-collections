@@ -49,11 +49,9 @@ public class LinkedList<T> extends AbstractCollection<T> implements List<T> {
 			 if (afterNext == null) {//if it was not next before remove
 	                throw new IllegalStateException();
 	            }
-	            Node<T> nextNode = afterNext.next;//reference to a next Node
+	         
 	            removeNode(afterNext);//removes node and feels all the deleted Node references and data with nulls
-	            if (current == afterNext) {
-	                current = nextNode;
-	            }
+
 	            afterNext = null;//clear reference to prepare to the new invoke of next function
 	        }
 		}
