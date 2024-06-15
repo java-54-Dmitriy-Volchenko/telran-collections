@@ -239,10 +239,37 @@ private static final int DEFAULT_SPACES_PER_LEVEL = 2;
 	 * or equal to the given element,
 	 *  or null if there is no such element
 	 */
+	
+	
 	public T floor(T key) {
-		// TODO Auto-generated method stub
-		return null;
+		
+		return nullOrNode(prevNode(key));
+	
 	}
+	
+
+	private Node<T> prevNode(T key) {
+	    Node<T> node = null;
+	    if (root != null) {
+	        node = getParentOrNode(key);
+	        int res = comp.compare(node.data, key);
+	        if (res > 0) {
+	            node = node.left != null ? getGreatestFrom(node.left) : findSmallerParent(node);
+	        }
+	    }
+	    return node;
+	}
+	
+	private Node<T> findSmallerParent(Node<T> node) {
+		while (node.parent != null && node.parent.right != node) {
+			node = node.parent;
+		}
+		return node.parent;
+	}
+	private T nullOrNode(Node<T> node) {
+		return node == null ? null : node.data;
+	}
+	
 	@Override
 	/**
 	 * Returns the least element in this set greater than 
@@ -250,8 +277,25 @@ private static final int DEFAULT_SPACES_PER_LEVEL = 2;
 	 *  or null if there is no such element
 	 */
 	public T ceiling(T key) {
-		// TODO Auto-generated method stub
-		return null;
+		return nullOrNode(nextNode(key));
+	}
+	private Node<T> nextNode(T key) {
+		Node<T> node = null;
+	    if (root != null) {
+	        node = getParentOrNode(key);
+	        int res = comp.compare(node.data, key);
+	        if (res < 0) {
+	            node = node.right != null ? getLeastFrom(node.right) : findGreaterParent(node);
+	        } 
+	    }
+	    return node;
+	}
+	
+	private Node<T> findGreaterParent(Node<T> node) {
+		while (node.parent != null && node.parent.left != node) {
+			node = node.parent;
+		}
+		return node.parent;
 	}
 	/**
 	 * display tree in the following form:
