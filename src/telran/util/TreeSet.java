@@ -306,14 +306,38 @@ private static final int DEFAULT_SPACES_PER_LEVEL = 2;
 	 *        100
 	 */
 	public void displayRootChildren() {
-		//TODO
+		displayRootChildren(root, 1);
+	}
+	private void displayRootChildren(Node<T> tmpRoot, int level) {//done with a method of "научный тык"
+		if (tmpRoot != null) {
+			displayRoot(tmpRoot, level);
+			
+			displayRootChildren(tmpRoot.left, level + 1);
+			
+			displayRootChildren(tmpRoot.right, level + 1);
+		}
+		
+		
 	}
 	/*****************************************/
 	/**
 	 * conversion of tree so that iterating has been in the inversive order
 	 */
 	public void treeInversion() {
-		//TODO
+		treeInversion(root);
+		comp = comp.reversed();//solution found in internet
+		}
+		
+	
+	public void treeInversion(Node<T> root) {
+		
+		if(root != null) { //exit condition
+			Node<T> depo = root.left;
+			root.left = root.right;
+			root.right = depo;
+			treeInversion(root.left);
+			treeInversion(root.right);
+		}
 	}
 	/**
 	 * displays tree in the following form
