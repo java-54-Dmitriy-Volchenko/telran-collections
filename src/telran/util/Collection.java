@@ -16,24 +16,20 @@ public interface Collection<T> extends Iterable<T> {
 	boolean remove(T pattern);
 	boolean contains(T pattern);
 	int size();
-	
-	default boolean removeIf(Predicate<T>predicate){
+	default boolean removeIf(Predicate<T> predicate) {
 		int oldSize = size();
 		Iterator<T> it = iterator();
 		while(it.hasNext()) {
-			T obj=it.next();
+			T obj = it.next();
 			if(predicate.test(obj)) {
 				it.remove();
 			}
-			
 		}
-		//removes elements objects matching  a given predicate
-		return oldSize>size();
+		return oldSize > size();
+	}
+	default void clear() {
+		//removes all objects
+		removeIf(obj -> true);
 	}
 	
-	default void clear() {
-		removeIf(obj->true);
-		//removes all objects
-	};
-;	
 }
